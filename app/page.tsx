@@ -4,7 +4,6 @@ import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { MobileMenu } from "@/components/mobile-menu"
 
 export default function Home() {
   return (
@@ -39,16 +38,13 @@ export default function Home() {
           </nav>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link href="/login" className="hidden md:block">
-              <Button variant="outline">Log in</Button>
-            </Link>
-            <Link href="/register" className="hidden md:block">
-              <Button>
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <MobileMenu />
+            <Button variant="outline" className="hidden md:flex">
+              Log in
+            </Button>
+            <Button>
+              Get Started
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
       </header>
@@ -69,17 +65,13 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/register">
-                    <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black">
-                      Command Your Future
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="#features">
-                    <Button size="lg" variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-400/10">
-                      Discover Our Power
-                    </Button>
-                  </Link>
+                  <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black">
+                    Command Your Future
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-400/10">
+                    Discover Our Power
+                  </Button>
                 </div>
               </div>
               <div className="flex items-center justify-center relative">
@@ -252,7 +244,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="h-5 w-5 text-primary" />
-                  <p>IMANU'ELRMGWEB.COM</p>
+                  <p>IMANU'ELRMG.COM</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4">
@@ -321,7 +313,7 @@ export default function Home() {
               <span className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">IMANU'EL RMG</span>
             </div>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              © {new Date().getFullYear()} IMANU'ELRMGWEB.COM. All rights reserved.
+              © {new Date().getFullYear()} IMANU'ELRMG.COM. All rights reserved.
             </p>
             <div className="flex gap-4">
               <Link href="#" className="text-gray-500 hover:text-primary dark:text-gray-400">
