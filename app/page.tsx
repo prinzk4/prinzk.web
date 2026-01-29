@@ -1,11 +1,40 @@
+'use client'
+
+import React from "react"
+
 import Link from "next/link"
-import { ArrowRight, CheckCircle, Globe, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, CheckCircle, Mail, MapPin, Phone } from "lucide-react"
 import Image from "next/image"
+import { useActionState } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { sendContactMessage } from "@/app/actions/contact"
 
 export default function Home() {
+  const router = useRouter()
+  const [contactState, contactAction, isContactPending] = useActionState(sendContactMessage, null)
+  const [contactMessage, setContactMessage] = useState('')
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault()
+    const element = document.getElementById(id)
+    element?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleContactSubmit = async (formData: FormData) => {
+    await contactAction(formData)
+    if (contactState?.success) {
+      setContactMessage('Message sent successfully!')
+      setTimeout(() => setContactMessage(''), 3000)
+      // Reset form
+      const form = document.getElementById('contact-form') as HTMLFormElement
+      form?.reset()
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -18,30 +47,28 @@ export default function Home() {
               height={50}
               className="h-10 w-auto"
             />
-            <Link href="/" className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">
-              IMANU'EL RMG
-            </Link>
+            <span className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">IMANU'EL RMG</span>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary">
+            <Link href="#features" onClick={(e) => handleSmoothScroll(e, 'features')} className="text-sm font-medium hover:text-primary transition">
               Features
             </Link>
-            <Link href="#about" className="text-sm font-medium hover:text-primary">
+            <Link href="#about" onClick={(e) => handleSmoothScroll(e, 'about')} className="text-sm font-medium hover:text-primary transition">
               About
             </Link>
-            <Link href="#testimonials" className="text-sm font-medium hover:text-primary">
+            <Link href="#testimonials" onClick={(e) => handleSmoothScroll(e, 'testimonials')} className="text-sm font-medium hover:text-primary transition">
               Testimonials
             </Link>
-            <Link href="#contact" className="text-sm font-medium hover:text-primary">
+            <Link href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="text-sm font-medium hover:text-primary transition">
               Contact
             </Link>
           </nav>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Button variant="outline" className="hidden md:flex">
+            <Button variant="outline" className="hidden md:flex bg-transparent" onClick={() => router.push('/login')}>
               Log in
             </Button>
-            <Button>
+            <Button onClick={() => router.push('/register')}>
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -65,11 +92,11 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black">
+                  <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black" onClick={() => router.push('/register')}>
                     Command Your Future
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
-                  <Button size="lg" variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-400/10">
+                  <Button size="lg" variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-400/10 bg-transparent" onClick={() => handleSmoothScroll({ preventDefault: () => {} } as React.MouseEvent<HTMLButtonElement>, 'features')}>
                     Discover Our Power
                   </Button>
                 </div>
@@ -154,7 +181,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button variant="outline">Learn More About Us</Button>
+                  <Button variant="outline" onClick={() => router.push('/about')}>Learn More About Us</Button>
                 </div>
               </div>
               <div className="flex items-center justify-center">
@@ -240,14 +267,10 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-5 w-5 text-primary" />
-                  <p>Officialprinzk@icloud.com</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Globe className="h-5 w-5 text-primary" />
-                  <p>IMANU'ELRMG.COM</p>
+                  <p>IMANUELRMG@PROTON.ME</p>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <form id="contact-form" action={handleContactSubmit} className="flex flex-col gap-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="grid gap-2">
                     <label
@@ -258,6 +281,8 @@ export default function Home() {
                     </label>
                     <input
                       id="name"
+                      name="name"
+                      required
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="Enter your name"
                     />
@@ -271,7 +296,9 @@ export default function Home() {
                     </label>
                     <input
                       id="email"
+                      name="email"
                       type="email"
+                      required
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="Enter your email"
                     />
@@ -286,15 +313,27 @@ export default function Home() {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
+                    required
                     className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Enter your message"
                   />
                 </div>
-                <Button size="lg">
-                  Send Message
+                {contactState?.success && (
+                  <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                    {contactState.message}
+                  </div>
+                )}
+                {contactState?.error && (
+                  <div className="rounded-md bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
+                    {contactState.error}
+                  </div>
+                )}
+                <Button size="lg" disabled={isContactPending}>
+                  {isContactPending ? 'Sending...' : 'Send Message'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </section>
@@ -313,10 +352,10 @@ export default function Home() {
               <span className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">IMANU'EL RMG</span>
             </div>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              © {new Date().getFullYear()} IMANU'ELRMG.COM. All rights reserved.
+              © {new Date().getFullYear()} IMANU'EL RMG. All rights reserved.
             </p>
             <div className="flex gap-4">
-              <Link href="#" className="text-gray-500 hover:text-primary dark:text-gray-400">
+              <Link href="/terms" className="text-gray-500 hover:text-primary dark:text-gray-400">
                 Terms
               </Link>
               <Link href="#" className="text-gray-500 hover:text-primary dark:text-gray-400">

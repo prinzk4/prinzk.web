@@ -9,7 +9,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "IMANU'EL RMG - Power and Excellence",
   description: "Strength, leadership, and excellence in everything we do.",
-  metadataBase: new URL("https://IMANU'ELRMG.COM"),
     generator: 'v0.app'
 }
 
