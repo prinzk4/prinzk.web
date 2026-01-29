@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, CheckCircle, Globe, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, CheckCircle, Mail, MapPin, Phone } from "lucide-react"
 import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
@@ -18,9 +18,7 @@ export default function Home() {
               height={50}
               className="h-10 w-auto"
             />
-            <Link href="/" className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">
-              IMANU'EL RMG
-            </Link>
+            <span className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">IMANU'EL RMG</span>
           </div>
           <nav className="hidden md:flex gap-6">
             <Link href="#features" className="text-sm font-medium hover:text-primary">
@@ -242,10 +240,6 @@ export default function Home() {
                   <Mail className="h-5 w-5 text-primary" />
                   <p>Officialprinzk@icloud.com</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Globe className="h-5 w-5 text-primary" />
-                  <p>IMANU'ELRMG.COM</p>
-                </div>
               </div>
               <div className="flex flex-col gap-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -313,7 +307,7 @@ export default function Home() {
               <span className="font-serif text-lg font-bold text-amber-300 dark:text-amber-200">IMANU'EL RMG</span>
             </div>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              © {new Date().getFullYear()} IMANU'ELRMG.COM. All rights reserved.
+              © {new Date().getFullYear()} IMANU'EL RMG. All rights reserved.
             </p>
             <div className="flex gap-4">
               <Link href="#" className="text-gray-500 hover:text-primary dark:text-gray-400">
