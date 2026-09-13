@@ -270,7 +270,8 @@ export default function Home() {
                   <p>IMANUELRMG@PROTON.ME</p>
                 </div>
               </div>
-              <form id="contact-form" action={handleContactSubmit} className="flex flex-col gap-4">
+                <form id="contact-form" action={handleContactSubmit} className="flex flex-col gap-4">
+                  <input type="hidden" name="subject" value="New booking request" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="grid gap-2">
                     <label
@@ -309,7 +310,8 @@ export default function Home() {
                     htmlFor="message"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Message
+                      Booking details
+
                   </label>
                   <textarea
                     id="message"
@@ -330,7 +332,7 @@ export default function Home() {
                   </div>
                 )}
                 <Button size="lg" disabled={isContactPending}>
-                  {isContactPending ? 'Sending...' : 'Send Message'}
+                  {isContactPending ? 'Sending...' : 'Submit Booking Request'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </form>
