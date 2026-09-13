@@ -6,7 +6,7 @@ import Link from "next/link"
 import { ArrowRight, CheckCircle, Mail, MapPin, Phone } from "lucide-react"
 import Image from "next/image"
 import { useActionState } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
@@ -24,16 +24,15 @@ export default function Home() {
     element?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleContactSubmit = async (formData: FormData) => {
-    await contactAction(formData)
-    if (contactState?.success) {
-      setContactMessage('Message sent successfully!')
-      setTimeout(() => setContactMessage(''), 3000)
-      // Reset form
-      const form = document.getElementById('contact-form') as HTMLFormElement
-      form?.reset()
-    }
-  }
+  useEffect(() => {
+    if (!contactState?.success) return
+
+    setContactMessage('Message sent successfully!')
+    const form = document.getElementById('contact-form') as HTMLFormElement | null
+    form?.reset()
+    const timeout = window.setTimeout(() => setContactMessage(''), 3000)
+    return () => window.clearTimeout(timeout)
+  }, [contactState])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -270,7 +269,7 @@ export default function Home() {
                   <p>IMANUELRMG@PROTON.ME</p>
                 </div>
               </div>
-              <form id="contact-form" action={handleContactSubmit} className="flex flex-col gap-4">
+              <form id="contact-form" action={contactAction} className="flex flex-col gap-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="grid gap-2">
                     <label

@@ -2,10 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 
-export async function sendContactMessage(formData: FormData) {
-  const name = formData.get('name')?.toString() || ''
-  const email = formData.get('email')?.toString() || ''
-  const message = formData.get('message')?.toString() || ''
+export async function sendContactMessage(_previousState: unknown, formData: FormData) {
+  const name = formData.get('name')?.toString().trim() || ''
+  const email = formData.get('email')?.toString().trim() || ''
+  const message = formData.get('message')?.toString().trim() || ''
 
   // Validation
   if (!name || !email || !message) {
@@ -21,12 +21,26 @@ export async function sendContactMessage(formData: FormData) {
   }
 
   try {
-    // Simulate sending email to both addresses
-    console.log('Contact form submitted:', { name, email, message })
-    console.log('Email would be sent to: Lordx111@icloud.com, IMANUELRMG@PROTON.ME')
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        access_key: process.env.WEB3FORMS_ACCESS_KEY,
+        subject: `New booking enquiry from ${name}`,
+        from_name: 'IMANU\'EL RMG Contact Form',
+        name,
+        email,
+        message,
+      }),
+    })
 
-    // In production, you would use an email service like SendGrid, Mailgun, or AWS SES
-    // For now, we'll just simulate the email sending
+    const result = await response.json()
+    if (!response.ok || !result.success) {
+      return { success: false, error: 'Failed to send message. Please try again.' }
+    }
 
     revalidatePath('/')
     return { success: true, message: 'Your message has been sent successfully!' }
